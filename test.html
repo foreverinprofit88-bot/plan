@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Firebase Test</title></head>
+<body style="font-family:monospace;padding:20px;background:#111;color:#eee">
+<h2>Firebase Connection Test</h2>
+<pre id="log">Testing...</pre>
+<script>
+const FB = 'https://bizplan-pro-9b646-default-rtdb.firebaseio.com';
+const log = document.getElementById('log');
+function write(msg) { log.textContent += '\n' + msg; }
+
+async function test() {
+  write('1. Testing GET /bizplans.json ...');
+  try {
+    const res = await fetch(FB + '/bizplans.json');
+    write('   Status: ' + res.status + ' ' + res.statusText);
+    const text = await res.text();
+    write('   Response: ' + text.substring(0,100));
+  } catch(e) {
+    write('   ERROR: ' + e.message);
+  }
+
+  write('2. Testing PUT /bizplans.json ...');
+  try {
+    const res = await fetch(FB + '/bizplans.json', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify([{id:1,name:"Test"}])
+    });
+    write('   Status: ' + res.status + ' ' + res.statusText);
+    const text = await res.text();
+    write('   Response: ' + text.substring(0,100));
+  } catch(e) {
+    write('   ERROR: ' + e.message);
+  }
+  write('DONE.');
+}
+test();
+</script>
+</body>
+</html>

@@ -439,29 +439,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,15,.95
 </div>
 
 <script>
-/* ===== STORAGE HELPERS — GitHub Cloud Storage ===== */
-const GH_TOKEN = ['ghp_W7DahvJj3ol9','dIm9XN7p49Z4nsUl','bK3mBvrU'].join('');
-const GH_REPO    = 'foreverinprofit88-bot/plan';
-const GH_FILE    = 'bizplan-data.json';
-const GH_API     = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
-
-let _ghSha = null; // current file SHA (needed for updates)
+/* ===== STORAGE HELPERS — Firebase Realtime Database ===== */
+const FB_URL = 'https://bizplan-pro-9b646-default-rtdb.firebaseio.com/businesses.json';
 
 async function loadFromStorage() {
   try {
     updateStorageBadge('loading', 0);
-    const res = await fetch(GH_API, {
-      headers: {
-        'Authorization': `token ${GH_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
-      }
-    });
+    const res = await fetch(FB_URL);
     if (!res.ok) throw new Error('fetch failed');
-    const json = await res.json();
-    _ghSha = json.sha;
-    const data = JSON.parse(atob(json.content.replace(/\n/g,'')));
-    updateStorageBadge('ok', Array.isArray(data) ? data.length : 0);
-    return Array.isArray(data) ? data : [];
+    const data = await res.json();
+    const arr = data ? Object.values(data) : [];
+    updateStorageBadge('ok', arr.length);
+    return arr;
   } catch(e) {
     updateStorageBadge('error', 0);
     return [];
@@ -471,24 +460,15 @@ async function loadFromStorage() {
 async function saveToStorage(data) {
   try {
     updateStorageBadge('saving', data.length);
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-    const body = {
-      message: `BizPlan update — ${data.length} ganacsi`,
-      content: content
-    };
-    if (_ghSha) body.sha = _ghSha;
-    const res = await fetch(GH_API, {
+    // Convert array to object with id as key (Firebase preferred)
+    const obj = {};
+    data.forEach(b => { obj['biz_' + b.id] = b; });
+    const res = await fetch(FB_URL.replace('/businesses.json', '.json'), {
       method: 'PUT',
-      headers: {
-        'Authorization': `token ${GH_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json',
-      },
-      body: JSON.stringify(body)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ businesses: obj })
     });
     if (!res.ok) throw new Error('save failed');
-    const json = await res.json();
-    _ghSha = json.content.sha;
     updateStorageBadge('ok', data.length);
   } catch(e) {
     updateStorageBadge('error', 0);
@@ -506,7 +486,7 @@ function updateStorageBadge(state, count) {
     el.textContent = '☁️ Keydinaya...';
   } else if (state === 'ok') {
     el.className = 'storage-badge';
-    el.textContent = '✅ GitHub · ' + count + ' Ganacsi';
+    el.textContent = '🔥 Firebase · ' + count + ' Ganacsi';
   } else {
     el.className = 'storage-badge loading';
     el.textContent = '⚠️ Khalad — Internet hubi';

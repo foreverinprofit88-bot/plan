@@ -507,7 +507,7 @@ async function init() {
   const badge = document.getElementById('storage-status');
   badge.textContent = '⏳ Soo rarista...';
   businesses = await loadFromStorage();
-  updateStorageBadge(true, businesses.length);
+  updateStorageBadge('ok', businesses.length);
   const now = new Date();
   document.getElementById('biz-date').value = now.toISOString().split('T')[0];
   document.getElementById('biz-time').value = now.toTimeString().slice(0,5);

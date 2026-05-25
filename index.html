@@ -440,23 +440,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,15,.95
 
 <script>
 /* ===== STORAGE HELPERS — Firebase Realtime Database ===== */
-const FB_URL = 'https://bizplan-pro-9b646-default-rtdb.firebaseio.com/businesses.json';
+const FB_BASE = 'https://bizplan-pro-9b646-default-rtdb.firebaseio.com';
 
 async function loadFromStorage() {
   try {
     updateStorageBadge('loading', 0);
-    const res = await fetch(FB_URL);
+    const res = await fetch(FB_BASE + '/bizplans.json', { method: 'GET' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    // Firebase returns object or null
-    let arr = [];
-    if (data && typeof data === 'object') {
-      arr = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
-    }
+    const arr = Array.isArray(data) ? data.filter(Boolean) : [];
     updateStorageBadge('ok', arr.length);
     return arr;
   } catch(e) {
-    console.error('Load error:', e);
+    console.error('Firebase load error:', e.message);
     updateStorageBadge('error', 0);
     return [];
   }
@@ -465,7 +461,7 @@ async function loadFromStorage() {
 async function saveToStorage(data) {
   try {
     updateStorageBadge('saving', data.length);
-    const res = await fetch(FB_URL, {
+    const res = await fetch(FB_BASE + '/bizplans.json', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -473,9 +469,9 @@ async function saveToStorage(data) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     updateStorageBadge('ok', data.length);
   } catch(e) {
-    console.error('Save error:', e);
+    console.error('Firebase save error:', e.message);
     updateStorageBadge('error', 0);
-    alert('⚠️ Keydintu waa fashilantay!\nError: ' + e.message);
+    alert('⚠️ Keydintu waa fashilantay!\nSababta: ' + e.message);
   }
 }
 

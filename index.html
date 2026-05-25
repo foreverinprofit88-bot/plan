@@ -446,12 +446,17 @@ async function loadFromStorage() {
   try {
     updateStorageBadge('loading', 0);
     const res = await fetch(FB_URL);
-    if (!res.ok) throw new Error('fetch failed');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    const arr = data ? Object.values(data) : [];
+    // Firebase returns object or null
+    let arr = [];
+    if (data && typeof data === 'object') {
+      arr = Array.isArray(data) ? data.filter(Boolean) : Object.values(data);
+    }
     updateStorageBadge('ok', arr.length);
     return arr;
   } catch(e) {
+    console.error('Load error:', e);
     updateStorageBadge('error', 0);
     return [];
   }
@@ -460,19 +465,17 @@ async function loadFromStorage() {
 async function saveToStorage(data) {
   try {
     updateStorageBadge('saving', data.length);
-    // Convert array to object with id as key (Firebase preferred)
-    const obj = {};
-    data.forEach(b => { obj['biz_' + b.id] = b; });
-    const res = await fetch(FB_URL.replace('/businesses.json', '.json'), {
+    const res = await fetch(FB_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ businesses: obj })
+      body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error('save failed');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     updateStorageBadge('ok', data.length);
   } catch(e) {
+    console.error('Save error:', e);
     updateStorageBadge('error', 0);
-    alert('⚠️ Keydintu waa fashilantay. Internet hubi!');
+    alert('⚠️ Keydintu waa fashilantay!\nError: ' + e.message);
   }
 }
 

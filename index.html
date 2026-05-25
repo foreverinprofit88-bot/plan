@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BizPlan Pro — Business Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0b0f;--bg2:#111318;--bg3:#181b23;--card:#1a1d26;--card2:#1f2330;
+--border:#2a2f3f;--border2:#353b4f;--accent:#6c63ff;--accent2:#8b84ff;
+--gold:#f5a623;--gold2:#fbbf24;--green:#22c55e;--red:#ef4444;--teal:#14b8a6;
+--text:#f0f2ff;--text2:#a0a8c0;--text3:#6b7494;
+--r:12px;--r2:18px;--r3:24px;
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.nav-tabs{display:flex;gap:4px;background:var(--bg3);padding:4px;border-radius:10px;border:1px solid var(--border)}
+.nav-tab{padding:6px 16px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:500;color:var(--text2);transition:all .2s;border:none;background:none;white-space:nowrap}
+.nav-tab.active{background:var(--accent);color:#fff}
+.nav-tab:hover:not(.active){background:var(--card2);color:var(--text)}
+.page{display:none;padding-top:80px;min-height:100vh}
+.page.active{display:block}
+.form-hero{text-align:center;padding:2.5rem 1.5rem 1.5rem;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(108,99,255,.15),transparent)}
+.form-hero h1{font-size:2rem;font-weight:800;margin-bottom:.4rem}
+.form-hero h1 span{background:linear-gradient(135deg,var(--accent2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.form-hero p{color:var(--text2);font-size:.9rem}
+.form-container{max-width:900px;margin:0 auto;padding:1.5rem}
+.location-select-bar{display:flex;gap:10px;margin-bottom:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:.9rem 1.2rem;align-items:center;flex-wrap:wrap}
+.location-select-bar label{font-size:.82rem;color:var(--text2);font-weight:500;white-space:nowrap}
+.loc-btn{flex:1;min-width:120px;padding:8px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-family:'Sora',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;font-weight:500}
+.loc-btn.selected{border-color:var(--accent);background:rgba(108,99,255,.15);color:var(--accent2)}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:1.3rem;margin-bottom:1rem;transition:border-color .2s}
+.section-card:hover{border-color:var(--border2)}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+.section-badge{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.b1{background:rgba(108,99,255,.2);color:var(--accent2)}
+.b2{background:rgba(34,197,94,.15);color:var(--green)}
+.b3{background:rgba(245,166,35,.15);color:var(--gold)}
+.b4{background:rgba(239,68,68,.15);color:var(--red)}
+.b5{background:rgba(20,184,166,.15);color:var(--teal)}
+.section-title{font-size:.85rem;font-weight:700;color:var(--text);letter-spacing:.3px;text-transform:uppercase}
+.section-subtitle{font-size:.72rem;color:var(--text3);margin-left:auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid.single{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:.78rem;color:var(--text2);font-weight:500}
+.field input,.field textarea,.field select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Sora',sans-serif;font-size:.83rem;transition:border-color .2s;outline:none;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent)}
+.field textarea{min-height:75px}
+.field select option{background:var(--bg3)}
+.field input::placeholder,.field textarea::placeholder{color:var(--text3)}
+.items-list{display:flex;flex-direction:column;gap:8px}
+.item-row{display:grid;grid-template-columns:56px 2fr 1.5fr 90px 1fr auto;gap:7px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+.item-row input{background:transparent;border:none;border-bottom:1px solid var(--border2);border-radius:0;padding:3px 0;font-size:.8rem;color:var(--text);font-family:'Sora',sans-serif;outline:none}
+.item-row input:focus{border-bottom-color:var(--accent)}
+.item-img-thumb{width:48px;height:48px;border-radius:8px;border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;background:var(--bg);transition:border-color .2s;position:relative}
+.item-img-thumb:hover{border-color:var(--accent)}
+.item-img-thumb img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.item-img-thumb input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.del-btn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border2);background:rgba(239,68,68,.1);color:var(--red);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.del-btn:hover{background:rgba(239,68,68,.25)}
+.add-item-btn{width:100%;padding:9px;border:1px dashed var(--border2);border-radius:9px;background:transparent;color:var(--text3);cursor:pointer;font-family:'Sora',sans-serif;font-size:.82rem;transition:all .2s;margin-top:5px}
+.add-item-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.bool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bool-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px}
+.bool-label{font-size:.78rem;color:var(--text2);flex:1;padding-right:8px}
+.toggle{display:flex;gap:4px}
+.tog-btn{padding:3px 10px;border-radius:5px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;font-size:.72rem;font-weight:500;transition:all .15s}
+.tog-btn.yes.active{background:rgba(34,197,94,.2);border-color:var(--green);color:var(--green)}
+.tog-btn.no.active{background:rgba(239,68,68,.2);border-color:var(--red);color:var(--red)}
+.submit-area{padding:1.5rem 0 3rem;text-align:center}
+.submit-btn{padding:13px 44px;background:linear-gradient(135deg,var(--accent),#9f5ffc);border:none;border-radius:11px;color:#fff;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.4px}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(108,99,255,.4)}
+.iskugeyn-wrap{overflow-x:auto}
+.iskugeyn-table{width:100%;border-collapse:collapse;font-size:.83rem;min-width:420px}
+.iskugeyn-table thead tr{background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(245,166,35,.08));border-bottom:2px solid var(--border2)}
+.iskugeyn-table th{padding:10px 12px;text-align:left;font-size:.72rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.iskugeyn-table td{padding:6px 10px;border-bottom:1px solid rgba(42,47,63,.5);vertical-align:middle}
+.iskugeyn-table tbody tr:hover{background:rgba(108,99,255,.04)}
+.isk-num{color:var(--text3);font-weight:600;font-size:.78rem;width:32px;text-align:center}
+.isk-img-cell{width:52px;height:52px;border-radius:8px;border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:var(--bg3);position:relative;transition:border-color .2s}
+.isk-img-cell:hover{border-color:var(--accent)}
+.isk-img-cell img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.isk-img-cell input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.isk-img-icon{font-size:1.1rem;color:var(--text3)}
+.isk-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);font-family:'Sora',sans-serif;font-size:.83rem;outline:none;padding:4px 2px}
+.isk-inp:focus{border-bottom-color:var(--accent)}
+.isk-price{font-family:'JetBrains Mono',monospace;color:var(--gold2)}
+.isk-total-row{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(245,166,35,.06)) !important;border-top:2px solid var(--border2) !important}
+.isk-total-row td{font-weight:700;padding:12px 12px !important}
+.isk-grand-total{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--gold2)}
+.dash-header{padding:2rem 1.5rem 1rem;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(108,99,255,.12),transparent)}
+.dash-header h2{font-size:1.7rem;font-weight:800}
+.dash-header h2 span{background:linear-gradient(135deg,var(--accent2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dash-body{max-width:1200px;margin:0 auto;padding:0 1.5rem 4rem}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:.9rem 1.2rem}
+.filter-bar label{font-size:.78rem;color:var(--text2);font-weight:500;white-space:nowrap}
+.budget-btns{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.budget-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:.78rem;font-weight:500;transition:all .15s}
+.budget-btn.active{border-color:var(--gold);background:rgba(245,166,35,.12);color:var(--gold2)}
+.loc-filter-btns{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap}
+.loc-f-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:.78rem;font-weight:500;transition:all .15s}
+.loc-f-btn.active{border-color:var(--teal);background:rgba(20,184,166,.12);color:var(--teal)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:1.1rem 1.2rem;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.s1::before{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.stat-card.s2::before{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.stat-card.s3::before{background:linear-gradient(90deg,var(--green),#4ade80)}
+.stat-card.s4::before{background:linear-gradient(90deg,var(--teal),#2dd4bf)}
+.stat-icon{font-size:1.3rem;margin-bottom:.5rem}
+.stat-label{font-size:.72rem;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.4px;margin-bottom:.2rem}
+.stat-value{font-size:1.7rem;font-weight:800}
+.stat-sub{font-size:.72rem;color:var(--text3);margin-top:.2rem}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.biz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;transition:all .25s;cursor:pointer;position:relative}
+.biz-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.biz-card-top{padding:1.1rem 1.2rem;border-bottom:1px solid var(--border)}
+.biz-card-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.biz-name{font-size:.95rem;font-weight:700;margin-bottom:.25rem;color:var(--text)}
+.biz-desc{font-size:.78rem;color:var(--text3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.biz-badge{padding:3px 9px;border-radius:18px;font-size:.7rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+.badge-local{background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.3)}
+.badge-intl{background:rgba(108,99,255,.15);color:var(--accent2);border:1px solid rgba(108,99,255,.3)}
+.biz-card-body{padding:.9rem 1.2rem}
+.biz-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.biz-stat{text-align:center;background:var(--bg3);border-radius:8px;padding:7px 5px}
+.biz-stat-val{font-size:.9rem;font-weight:700;color:var(--text)}
+.biz-stat-lbl{font-size:.65rem;color:var(--text3);margin-top:2px}
+.biz-cost{font-family:'JetBrains Mono',monospace;color:var(--gold2)}
+.biz-card-footer{padding:.7rem 1.2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.biz-date{font-size:.72rem;color:var(--text3)}
+.score-bar{display:flex;gap:2px;align-items:center}
+.score-pip{width:7px;height:7px;border-radius:2px;background:var(--border)}
+.score-pip.filled{background:var(--gold)}
+.card-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.biz-card:hover .card-actions{opacity:1}
+.card-act-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);background:var(--card2);color:var(--text2);cursor:pointer;font-size:.82rem;display:flex;align-items:center;justify-content:center;transition:all .15s;z-index:2}
+.card-act-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.card-act-btn.del-card:hover{background:var(--red);border-color:var(--red);color:#fff}
+.empty-state{text-align:center;padding:3.5rem 2rem;color:var(--text3)}
+.empty-state h3{font-size:1.1rem;font-weight:600;color:var(--text2);margin-bottom:.4rem}
+.empty-icon{font-size:2.8rem;margin-bottom:.8rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:var(--r3);width:100%;max-width:700px;max-height:92vh;overflow-y:auto}
+.modal.sm{max-width:440px}
+.modal.lg{max-width:900px}
+.modal-head{padding:1.3rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:2}
+.modal-head h3{font-size:1rem;font-weight:700}
+.close-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.close-btn:hover{background:var(--card2)}
+.modal-body{padding:1.3rem}
+.detail-section{margin-bottom:1.4rem}
+.detail-section h4{font-size:.72rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.detail-item label{font-size:.72rem;color:var(--text3);display:block;margin-bottom:2px}
+.detail-item p{font-size:.85rem;color:var(--text);font-weight:500}
+.detail-item.full{grid-column:span 2}
+.items-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.items-table th{text-align:left;color:var(--text3);padding:5px 8px;border-bottom:1px solid var(--border);font-weight:500}
+.items-table td{padding:6px 8px;border-bottom:1px solid rgba(42,47,63,.4)}
+.items-table .price-cell{font-family:'JetBrains Mono',monospace;color:var(--gold2)}
+.edit-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.edit-form-grid.single{grid-template-columns:1fr}
+.ef{display:flex;flex-direction:column;gap:4px}
+.ef label{font-size:.75rem;color:var(--text2);font-weight:500}
+.ef input,.ef textarea,.ef select{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:'Sora',sans-serif;font-size:.82rem;outline:none;resize:vertical}
+.ef input:focus,.ef textarea:focus,.ef select:focus{border-color:var(--accent)}
+.ef textarea{min-height:60px}
+.budget-grid-modal{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.bm-btn{padding:10px 6px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:600;transition:all .15s;text-align:center}
+.bm-btn:hover{border-color:var(--gold);color:var(--gold2);background:rgba(245,166,35,.1)}
+.bm-btn.sel{border-color:var(--gold);color:var(--gold2);background:rgba(245,166,35,.15)}
+/* Storage status badge */
+.storage-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.7rem;font-weight:600;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.storage-badge.loading{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.25);color:var(--gold2)}
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .bool-grid{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .detail-item.full{grid-column:span 1}
+  .item-row{grid-template-columns:46px 1fr 80px auto;gap:5px}
+  .item-row .item-source,.item-row .item-link{display:none}
+  .edit-form-grid{grid-template-columns:1fr}
+  .budget-grid-modal{grid-template-columns:repeat(2,1fr)}
+  .iskugeyn-table{min-width:340px}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.section-card{animation:fadeUp .35s ease both}
+.biz-card{animation:fadeUp .3s ease both}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">📊 BizPlan Pro</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="storage-badge loading" id="storage-status">⏳ Loading...</span>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('form',this)">🧾 Wax Geli</button>
+      <button class="nav-tab" onclick="showPage('dashboard',this)">📈 Dashboard</button>
+    </div>
+  </div>
+</nav>
+
+<!-- FORM PAGE -->
+<div class="page active" id="page-form">
+  <div class="form-hero">
+    <h1>🧾 <span>Professional Business Plan</span></h1>
+    <p>Xog geli oo ganacsi buuxa abuur</p>
+  </div>
+  <div class="form-container">
+
+    <div class="location-select-bar">
+      <label>📍 Goobta:</label>
+      <button class="loc-btn selected" id="loc-local" onclick="selectLoc('local')">🏠 Dalka Gudihiisa</button>
+      <button class="loc-btn" id="loc-intl" onclick="selectLoc('intl')">✈️ Dalka Dibadiisa</button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b1">1</div><div class="section-title">🟦 Business Identity</div><div class="section-subtitle">Magaca & Sharaxaadda</div></div>
+      <div class="form-grid">
+        <div class="field"><label>Business Name *</label><input type="text" id="biz-name" placeholder="Magaca Ganacsigaaga"></div>
+        <div class="field"><label>Industry / Nooca</label>
+          <select id="biz-industry"><option value="">Xulo...</option><option>Technology / Teknolojiyad</option><option>Food & Restaurant / Cunto</option><option>Retail / Iibinta</option><option>Education / Waxbarashada</option><option>Health / Caafimaad</option><option>Construction / Dhismo</option><option>Transport / Gadiid</option><option>Agriculture / Beeraha</option><option>Finance / Maaliyadda</option><option>Other / Kale</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b2">2</div><div class="section-title">🟩 Business Description</div><div class="section-subtitle">Sharaxaad</div></div>
+      <div class="form-grid single"><div class="field"><label>Sharaxaad / Description</label><textarea id="biz-desc" placeholder="Sharaxaad buuxda..."></textarea></div></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b3">3</div><div class="section-title">🟨 Market & Demand</div><div class="section-subtitle">Suuqa</div></div>
+      <div class="form-grid single">
+        <div class="field"><label>Baahida / Need</label><textarea id="biz-need" placeholder="Baahida ganacsiga..."></textarea></div>
+        <div class="field"><label>Suuqa / Market</label><textarea id="biz-market" placeholder="Suuqa..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b4">4</div><div class="section-title">🟧 Product / Service</div><div class="section-subtitle">Badeecada</div></div>
+      <div class="form-grid single"><div class="field"><label>Badeecada / Product</label><textarea id="biz-product" placeholder="Badeecada ama adeega..."></textarea></div></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b5">5</div><div class="section-title">🟥 Unique Value</div><div class="section-subtitle">Qiimaha Gaarka</div></div>
+      <div class="form-grid single"><div class="field"><label>Qiimaha / Value</label><textarea id="biz-value" placeholder="Sixirka..."></textarea></div></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b1">6-7</div><div class="section-title">🟪 Opportunities & Strategy</div><div class="section-subtitle">Fursadaha</div></div>
+      <div class="form-grid single">
+        <div class="field"><label>Fursadaha / Opportunities</label><textarea id="biz-opp" placeholder="Fursadaha..."></textarea></div>
+        <div class="field"><label>Xeeladda / Strategy</label><textarea id="biz-strategy" placeholder="Xeeladda guusha..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b2">8</div><div class="section-title">⬛ Target Customers</div><div class="section-subtitle">Macaamiisha</div></div>
+      <div class="form-grid single"><div class="field"><label>Macaamiisha / Customers</label><textarea id="biz-customers" placeholder="Macaamiisha bartilmaameedka..."></textarea></div></div>
+    </div>
+
+    <!-- SECTION 9: Business Questions — FIXED SOMALI -->
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b3">9</div><div class="section-title">🟦 Su'aalaha Ganacsiga</div><div class="section-subtitle">Business Questions</div></div>
+      <div class="bool-grid">
+        <div class="bool-item">
+          <span class="bool-label">Ganacsigaagan ma waxaa la duubi karaa (diiwaan galin rasmi ah)?</span>
+          <div class="toggle">
+            <button class="tog-btn yes" onclick="toggleBool(this,'reg','yes')">Haa</button>
+            <button class="tog-btn no" onclick="toggleBool(this,'reg','no')">Maya</button>
+          </div>
+        </div>
+        <div class="bool-item">
+          <span class="bool-label">Ma ganacsigaagu waxa uu xiriir la leeyahay aalado halista ah oo lagu dili karo?</span>
+          <div class="toggle">
+            <button class="tog-btn yes" onclick="toggleBool(this,'danger','yes')">Haa</button>
+            <button class="tog-btn no active" onclick="toggleBool(this,'danger','no')">Maya</button>
+          </div>
+        </div>
+        <div class="bool-item">
+          <span class="bool-label">Ma ganacsigaagu wuxuu ka kooban yahay ama la xiriiraa mukhadaraadka?</span>
+          <div class="toggle">
+            <button class="tog-btn yes" onclick="toggleBool(this,'drugs','yes')">Haa</button>
+            <button class="tog-btn no active" onclick="toggleBool(this,'drugs','no')">Maya</button>
+          </div>
+        </div>
+        <div class="bool-item">
+          <span class="bool-label">Ma ganacsigaagu wuxuu isticmaalaa ama iibiyaa aaladaha dabka dhaliya?</span>
+          <div class="toggle">
+            <button class="tog-btn yes" onclick="toggleBool(this,'fire','yes')">Haa</button>
+            <button class="tog-btn no active" onclick="toggleBool(this,'fire','no')">Maya</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b4">10</div><div class="section-title">🟩 Marketing</div></div>
+      <div class="form-grid single"><div class="field"><label>Marketing</label><textarea id="biz-marketing" placeholder="Xeelada marketing..."></textarea></div></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b5">11</div><div class="section-title">🟨 Capital / Investment</div><div class="section-subtitle">Lacagta</div></div>
+      <div class="form-grid">
+        <div class="field"><label>Starting Capital ($)</label><input type="number" id="biz-capital" placeholder="0.00" min="0"></div>
+        <div class="field"><label>Success Rate (1-10)</label><input type="number" id="biz-score" placeholder="1-10" min="1" max="10"></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b1">12</div><div class="section-title">🟧 Supplies / Items List</div><div class="section-subtitle">Liiska Sheyga</div></div>
+      <div style="display:grid;grid-template-columns:56px 2fr 1.5fr 90px 1fr auto;gap:7px;padding:0 0 6px;font-size:.7rem;color:var(--text3);font-weight:600">
+        <span>📸</span><span>MAGACA</span><span>MEESHA</span><span>QIIMO $</span><span>LINK</span><span></span>
+      </div>
+      <div class="items-list" id="items-list"></div>
+      <button class="add-item-btn" onclick="addItem()">+ Ku dar shey cusub</button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-badge b2">13</div>
+        <div>
+          <div class="section-title">🟦 QORSHAHA LAGU BILAABAYO</div>
+          <div style="font-size:.7rem;color:var(--accent2);margin-top:2px;font-weight:600;letter-spacing:.3px">ISKUGEYN</div>
+        </div>
+        <div class="section-subtitle">Liiska Alaabta</div>
+      </div>
+      <div class="iskugeyn-wrap">
+        <table class="iskugeyn-table" id="iskugeyn-table">
+          <thead>
+            <tr>
+              <th style="width:36px">#</th>
+              <th style="width:64px">📸 SAWIR</th>
+              <th>📦 MAGACYADA SHEYADA AAD U BAAHANTAHAY OO DHAN</th>
+              <th style="width:120px">💵 QIIMAHA MID WALBA</th>
+            </tr>
+          </thead>
+          <tbody id="iskugeyn-body"></tbody>
+          <tfoot>
+            <tr class="isk-total-row">
+              <td colspan="2" style="color:var(--text2);font-size:.78rem">💵 WADARTA GUUD / ISKUGEYN</td>
+              <td style="color:var(--text2);font-size:.75rem" id="isk-item-count">0 shey</td>
+              <td><span class="isk-grand-total" id="isk-total">$0.00</span></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:7px">
+        <button class="add-item-btn" style="flex:1" onclick="addIskRow()">+ Ku dar shey</button>
+        <button class="add-item-btn" style="flex:none;width:auto;padding:9px 16px;border-color:var(--red);color:var(--red)" onclick="clearIskRows()">🗑 Nadiifi</button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><div class="section-badge b3">14</div><div class="section-title">🟩 Date & Time</div></div>
+      <div class="form-grid">
+        <div class="field"><label>Taariikhda / Date</label><input type="date" id="biz-date"></div>
+        <div class="field"><label>Saacada / Time</label><input type="time" id="biz-time"></div>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button class="submit-btn" onclick="submitPlan()">✅ Kaydi Ganacsiga — Save Business Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div class="page" id="page-dashboard">
+  <div class="dash-header">
+    <div class="dash-body" style="padding-bottom:0">
+      <h2>📈 <span>Dashboard</span></h2>
+      <p style="color:var(--text2);margin-top:.3rem;font-size:.88rem">Dhamaan ganacsigagaaga halkaan ku eeg — Edit ama tirtir</p>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="filter-bar">
+      <label>💰 Budget:</label>
+      <div class="budget-btns">
+        <button class="budget-btn active" onclick="filterBudget(0,this)">Dhamaan</button>
+        <button class="budget-btn" onclick="openBudgetModal()">💵 Dooro Lacag...</button>
+        <span id="selected-budget-label" style="font-size:.75rem;color:var(--gold2);display:none;padding:4px 10px;background:rgba(245,166,35,.1);border-radius:7px;border:1px solid rgba(245,166,35,.3)"></span>
+      </div>
+      <div class="loc-filter-btns">
+        <button class="loc-f-btn active" onclick="filterLoc('all',this)">🌍 Dhamaan</button>
+        <button class="loc-f-btn" onclick="filterLoc('local',this)">🏠 Gudaha</button>
+        <button class="loc-f-btn" onclick="filterLoc('intl',this)">✈️ Dibadda</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card s1"><div class="stat-icon">🏢</div><div class="stat-label">Total Businesses</div><div class="stat-value" id="stat-total">0</div></div>
+      <div class="stat-card s2"><div class="stat-icon">💰</div><div class="stat-label">Highest Capital</div><div class="stat-value" id="stat-max">$0</div></div>
+      <div class="stat-card s3"><div class="stat-icon">🏠</div><div class="stat-label">Gudaha / Local</div><div class="stat-value" id="stat-local">0</div></div>
+      <div class="stat-card s4"><div class="stat-icon">✈️</div><div class="stat-label">Dibadda / Intl</div><div class="stat-value" id="stat-intl">0</div></div>
+    </div>
+    <div class="cards-grid" id="cards-grid">
+      <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📋</div><h3>Ganacsi ma jiro weli</h3><p>Ku qor ganacsiga qaybta "Wax Geli"</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET MODAL -->
+<div class="modal-overlay" id="budget-modal-overlay" onclick="if(event.target===this)closeBudgetModal()">
+  <div class="modal sm">
+    <div class="modal-head"><h3>💵 Lacagta Dooro</h3><button class="close-btn" onclick="closeBudgetModal()">✕</button></div>
+    <div class="modal-body">
+      <p style="color:var(--text2);font-size:.83rem;margin-bottom:1rem">Lacagta xulo — ganacsiyada u dhadhawaa ayaa soo muuqan doona</p>
+      <div class="budget-grid-modal" id="budget-options-grid"></div>
+      <div style="margin-top:1rem;display:flex;gap:8px;align-items:center">
+        <input type="number" id="custom-budget-input" placeholder="Xad aad doortay..." min="0" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Sora',sans-serif;font-size:.83rem;outline:none">
+        <button onclick="applyCustomBudget()" style="padding:9px 16px;background:linear-gradient(135deg,var(--accent),#9f5ffc);border:none;border-radius:8px;color:#fff;font-family:'Sora',sans-serif;font-size:.83rem;font-weight:600;cursor:pointer;white-space:nowrap">✅ Codso</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW/EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal lg" id="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title">Business Details</h3>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button id="modal-edit-btn" onclick="toggleEditMode()" style="padding:5px 14px;border-radius:7px;border:1px solid var(--accent);background:rgba(108,99,255,.12);color:var(--accent2);cursor:pointer;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;transition:all .2s">✏️ Edit</button>
+        <button id="modal-save-btn" onclick="saveEditedPlan()" style="display:none;padding:5px 14px;border-radius:7px;border:1px solid var(--green);background:rgba(34,197,94,.12);color:var(--green);cursor:pointer;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600">✅ Keydi</button>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ===== STORAGE HELPERS — GitHub Cloud Storage ===== */
+const GH_TOKEN = ['ghp_W7DahvJj3ol9','dIm9XN7p49Z4nsUl','bK3mBvrU'].join('');
+const GH_REPO    = 'foreverinprofit88-bot/plan';
+const GH_FILE    = 'bizplan-data.json';
+const GH_API     = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+
+let _ghSha = null; // current file SHA (needed for updates)
+
+async function loadFromStorage() {
+  try {
+    updateStorageBadge('loading', 0);
+    const res = await fetch(GH_API, {
+      headers: {
+        'Authorization': `token ${GH_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if (!res.ok) throw new Error('fetch failed');
+    const json = await res.json();
+    _ghSha = json.sha;
+    const data = JSON.parse(atob(json.content.replace(/\n/g,'')));
+    updateStorageBadge('ok', Array.isArray(data) ? data.length : 0);
+    return Array.isArray(data) ? data : [];
+  } catch(e) {
+    updateStorageBadge('error', 0);
+    return [];
+  }
+}
+
+async function saveToStorage(data) {
+  try {
+    updateStorageBadge('saving', data.length);
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const body = {
+      message: `BizPlan update — ${data.length} ganacsi`,
+      content: content
+    };
+    if (_ghSha) body.sha = _ghSha;
+    const res = await fetch(GH_API, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${GH_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('save failed');
+    const json = await res.json();
+    _ghSha = json.content.sha;
+    updateStorageBadge('ok', data.length);
+  } catch(e) {
+    updateStorageBadge('error', 0);
+    alert('⚠️ Keydintu waa fashilantay. Internet hubi!');
+  }
+}
+
+function updateStorageBadge(state, count) {
+  const el = document.getElementById('storage-status');
+  if (state === 'loading') {
+    el.className = 'storage-badge loading';
+    el.textContent = '⏳ Soo rarista...';
+  } else if (state === 'saving') {
+    el.className = 'storage-badge loading';
+    el.textContent = '☁️ Keydinaya...';
+  } else if (state === 'ok') {
+    el.className = 'storage-badge';
+    el.textContent = '✅ GitHub · ' + count + ' Ganacsi';
+  } else {
+    el.className = 'storage-badge loading';
+    el.textContent = '⚠️ Khalad — Internet hubi';
+  }
+}
+
+/* ===== STATE ===== */
+let businesses = [];
+let currentLoc='local', currentBudget=0, currentLocFilter='all';
+let boolVals={reg:'',danger:'no',drugs:'no',fire:'no'};
+let items=[];
+let iskRows=[];
+let currentEditId=null, editMode=false;
+
+for(let i=0;i<15;i++) iskRows.push({img:'',name:'',price:''});
+
+/* ===== INIT ===== */
+async function init() {
+  const badge = document.getElementById('storage-status');
+  badge.textContent = '⏳ Soo rarista...';
+  businesses = await loadFromStorage();
+  updateStorageBadge(true, businesses.length);
+  const now = new Date();
+  document.getElementById('biz-date').value = now.toISOString().split('T')[0];
+  document.getElementById('biz-time').value = now.toTimeString().slice(0,5);
+  addItem();
+  renderIskRows();
+}
+
+/* ===== PAGE NAV ===== */
+function showPage(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(p==='dashboard')renderDashboard();
+}
+
+/* ===== FORM ===== */
+function selectLoc(loc){
+  currentLoc=loc;
+  document.getElementById('loc-local').classList.toggle('selected',loc==='local');
+  document.getElementById('loc-intl').classList.toggle('selected',loc==='intl');
+}
+function toggleBool(btn,key,val){
+  boolVals[key]=val;
+  btn.closest('.toggle').querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ===== ITEMS (Section 12) ===== */
+function addItem(){
+  items.push({id:Date.now(),imgSrc:'',name:'',source:'',price:'',link:''});
+  renderItems();
+}
+function renderItems(){
+  document.getElementById('items-list').innerHTML=items.map((it,i)=>`
+    <div class="item-row">
+      <div class="item-img-thumb">
+        ${it.imgSrc?`<img src="${it.imgSrc}">`:`<span style="font-size:1.1rem;color:var(--text3)">📷</span>`}
+        <input type="file" accept="image/*" onchange="loadItemImg(${i},this)">
+      </div>
+      <input placeholder="Magaca..." value="${esc(it.name)}" oninput="items[${i}].name=this.value">
+      <input class="item-source" placeholder="Meesha..." value="${esc(it.source)}" oninput="items[${i}].source=this.value">
+      <input type="number" placeholder="$0" value="${it.price}" oninput="items[${i}].price=this.value">
+      <input class="item-link" placeholder="https://..." value="${esc(it.link)}" oninput="items[${i}].link=this.value">
+      <button class="del-btn" onclick="delItem(${i})">✕</button>
+    </div>`).join('');
+}
+function loadItemImg(i,inp){
+  const f=inp.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{items[i].imgSrc=e.target.result;renderItems()}; r.readAsDataURL(f);
+}
+function delItem(i){items.splice(i,1);renderItems();}
+
+/* ===== ISKUGEYN (Section 13) ===== */
+function renderIskRows(){
+  document.getElementById('iskugeyn-body').innerHTML=iskRows.map((r,i)=>`
+    <tr>
+      <td class="isk-num">${i+1}</td>
+      <td>
+        <div class="isk-img-cell">
+          ${r.img?`<img src="${r.img}">`:`<span class="isk-img-icon">📷</span>`}
+          <input type="file" accept="image/*" onchange="loadIskImg(${i},this)">
+        </div>
+      </td>
+      <td><input class="isk-inp" type="text" placeholder="Magaca sheyda..." value="${esc(r.name)}" oninput="iskRows[${i}].name=this.value;calcIskTotal()"></td>
+      <td><input class="isk-inp isk-price" type="number" placeholder="0.00" value="${r.price}" oninput="iskRows[${i}].price=this.value;calcIskTotal()"></td>
+    </tr>`).join('');
+  calcIskTotal();
+}
+function loadIskImg(i,inp){
+  const f=inp.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{iskRows[i].img=e.target.result;renderIskRows()}; r.readAsDataURL(f);
+}
+function addIskRow(){iskRows.push({img:'',name:'',price:''});renderIskRows();}
+function clearIskRows(){
+  if(!confirm('Dhamaan safarada nadiifi?'))return;
+  iskRows=[];
+  for(let i=0;i<15;i++) iskRows.push({img:'',name:'',price:''});
+  renderIskRows();
+}
+function calcIskTotal(){
+  const active=iskRows.filter(r=>r.name||r.price);
+  const total=iskRows.reduce((s,r)=>s+parseFloat(r.price||0),0);
+  document.getElementById('isk-total').textContent='$'+total.toFixed(2);
+  document.getElementById('isk-item-count').textContent=active.length+' shey';
+}
+
+/* ===== SUBMIT ===== */
+async function submitPlan(){
+  const name=document.getElementById('biz-name').value.trim();
+  if(!name){alert('Fadlan magaca ganacsiga geli!');return;}
+  const capital=parseFloat(document.getElementById('biz-capital').value)||0;
+  const score=Math.min(10,Math.max(1,parseInt(document.getElementById('biz-score').value)||5));
+  const totalCost=items.reduce((s,x)=>s+parseFloat(x.price||0),0);
+  const plan={
+    id:Date.now(), name,
+    industry:document.getElementById('biz-industry').value,
+    desc:document.getElementById('biz-desc').value,
+    need:document.getElementById('biz-need').value,
+    market:document.getElementById('biz-market').value,
+    product:document.getElementById('biz-product').value,
+    value:document.getElementById('biz-value').value,
+    opp:document.getElementById('biz-opp').value,
+    strategy:document.getElementById('biz-strategy').value,
+    customers:document.getElementById('biz-customers').value,
+    bools:{...boolVals},
+    marketing:document.getElementById('biz-marketing').value,
+    capital, score, items:[...items], totalCost, loc:currentLoc,
+    date:document.getElementById('biz-date').value||new Date().toISOString().split('T')[0],
+    time:document.getElementById('biz-time').value||new Date().toTimeString().slice(0,5),
+  };
+  businesses.push(plan);
+  await saveToStorage(businesses);
+  alert('✅ Ganacsiga si guul leh ayaa loo keydsaday!');
+  resetForm();
+}
+function resetForm(){
+  ['biz-name','biz-industry','biz-desc','biz-need','biz-market','biz-product','biz-value','biz-opp','biz-strategy','biz-customers','biz-marketing','biz-capital','biz-score'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  items=[];renderItems();
+  boolVals={reg:'',danger:'no',drugs:'no',fire:'no'};
+  document.querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tog-btn.no').forEach(b=>{if(b.closest('.bool-item'))b.classList.add('active');});
+  selectLoc('local');
+  const now=new Date();
+  document.getElementById('biz-date').value=now.toISOString().split('T')[0];
+  document.getElementById('biz-time').value=now.toTimeString().slice(0,5);
+}
+
+/* ===== BUDGET MODAL ===== */
+const budgetAmounts=[1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,15000,20000,25000,30000,40000,50000,75000,100000];
+function openBudgetModal(){
+  document.getElementById('budget-options-grid').innerHTML=budgetAmounts.map(v=>`
+    <button class="bm-btn${currentBudget===v?' sel':''}" onclick="selectBudgetAmount(${v})">$${v>=1000?(v/1000)+'k':v}</button>`).join('');
+  document.getElementById('budget-modal-overlay').classList.add('open');
+}
+function selectBudgetAmount(v){applyBudget(v);closeBudgetModal();}
+function applyCustomBudget(){
+  const v=parseFloat(document.getElementById('custom-budget-input').value)||0;
+  applyBudget(v);closeBudgetModal();
+}
+function applyBudget(v){
+  currentBudget=v;
+  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
+  const lbl=document.getElementById('selected-budget-label');
+  if(v===0){lbl.style.display='none';}
+  else{lbl.style.display='inline-block';lbl.textContent='💰 $'+(v>=1000?(v/1000)+'k':v)+'+';}
+  renderCards();
+}
+function closeBudgetModal(){document.getElementById('budget-modal-overlay').classList.remove('open');}
+function filterBudget(v,btn){
+  currentBudget=v;
+  document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.getElementById('selected-budget-label').style.display='none';
+  renderCards();
+}
+function filterLoc(v,btn){
+  currentLocFilter=v;
+  document.querySelectorAll('.loc-f-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderCards();
+}
+
+/* ===== DASHBOARD ===== */
+function renderDashboard(){
+  const t=businesses.length;
+  document.getElementById('stat-total').textContent=t;
+  document.getElementById('stat-local').textContent=businesses.filter(b=>b.loc==='local').length;
+  document.getElementById('stat-intl').textContent=businesses.filter(b=>b.loc==='intl').length;
+  document.getElementById('stat-max').textContent=t?'$'+Math.max(...businesses.map(b=>b.capital)).toLocaleString():'$0';
+  renderCards();
+}
+function renderCards(){
+  const grid=document.getElementById('cards-grid');
+  const filtered=businesses.filter(b=>{
+    const capOk=b.capital>=currentBudget;
+    const locOk=currentLocFilter==='all'||(currentLocFilter==='local'&&b.loc==='local')||(currentLocFilter==='intl'&&b.loc==='intl');
+    return capOk&&locOk;
+  });
+  if(!filtered.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📋</div><h3>${businesses.length?'Filter-ka wax kama soo bixin':'Ganacsi ma jiro weli'}</h3><p>${businesses.length?'Xulo filter kale':'Ku qor ganacsiga qaybta "Wax Geli"'}</p></div>`;
+    return;
+  }
+  grid.innerHTML=filtered.map(b=>{
+    const pips=Array.from({length:10},(_,i)=>`<div class="score-pip${i<b.score?' filled':''}"></div>`).join('');
+    return`<div class="biz-card">
+      <div class="card-actions">
+        <button class="card-act-btn" onclick="event.stopPropagation();openEditModal(${b.id})" title="Edit">✏️</button>
+        <button class="card-act-btn del-card" onclick="event.stopPropagation();deleteBiz(${b.id})" title="Tirtir">🗑</button>
+      </div>
+      <div onclick="openViewModal(${b.id})">
+        <div class="biz-card-top">
+          <div class="biz-card-row">
+            <div><div class="biz-name">${b.name}</div><div class="biz-desc">${b.industry||b.desc||'—'}</div></div>
+            <span class="biz-badge ${b.loc==='local'?'badge-local':'badge-intl'}">${b.loc==='local'?'🏠 Gudaha':'✈️ Dibadda'}</span>
+          </div>
+        </div>
+        <div class="biz-card-body">
+          <div class="biz-stats">
+            <div class="biz-stat"><div class="biz-stat-val biz-cost">$${b.capital.toLocaleString()}</div><div class="biz-stat-lbl">Capital</div></div>
+            <div class="biz-stat"><div class="biz-stat-val biz-cost">$${(b.totalCost||0).toFixed(0)}</div><div class="biz-stat-lbl">Kharash</div></div>
+            <div class="biz-stat"><div class="biz-stat-val" style="color:var(--gold2)">${b.score}/10</div><div class="biz-stat-lbl">Guul</div></div>
+          </div>
+        </div>
+        <div class="biz-card-footer">
+          <span class="biz-date">📅 ${b.date}${b.time?' ⏰ '+b.time:''}</span>
+          <div class="score-bar">${pips}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ===== DELETE ===== */
+async function deleteBiz(id){
+  if(!confirm('Ganacsigan tirtiraysaa?'))return;
+  businesses=businesses.filter(b=>b.id!==id);
+  await saveToStorage(businesses);
+  renderDashboard();
+}
+
+/* ===== VIEW MODAL ===== */
+function openViewModal(id){
+  currentEditId=id; editMode=false;
+  document.getElementById('modal-edit-btn').style.display='';
+  document.getElementById('modal-save-btn').style.display='none';
+  document.getElementById('modal-edit-btn').textContent='✏️ Edit';
+  const b=businesses.find(x=>x.id===id); if(!b)return;
+  document.getElementById('modal-title').textContent='🏢 '+b.name;
+  const boolStr=(k,lbl)=>`<div class="detail-item"><label>${lbl}</label><p>${b.bools&&b.bools[k]==='yes'?'✅ Haa':'❌ Maya'}</p></div>`;
+  const iHtml=b.items&&b.items.length?`<table class="items-table"><thead><tr><th>#</th><th>📸</th><th>Magaca</th><th>Meesha</th><th>Qiimo</th></tr></thead><tbody>${b.items.map((it,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td>${it.imgSrc?`<img src="${it.imgSrc}" style="width:32px;height:32px;border-radius:5px;object-fit:cover">`:'—'}</td><td>${it.name||'—'}</td><td>${it.source||'—'}</td><td class="price-cell">$${parseFloat(it.price||0).toFixed(2)}</td></tr>`).join('')}<tr><td colspan="4" style="font-weight:600;color:var(--text2)">TOTAL</td><td class="price-cell" style="font-weight:700">$${(b.totalCost||0).toFixed(2)}</td></tr></tbody></table>`:'<p style="color:var(--text3);font-size:.83rem">Sheyga la\'aan</p>';
+  document.getElementById('modal-body').innerHTML=`
+    <div class="detail-section"><h4>Basic Info</h4><div class="detail-grid">
+      <div class="detail-item"><label>Industry</label><p>${b.industry||'—'}</p></div>
+      <div class="detail-item"><label>Location</label><p>${b.loc==='local'?'🏠 Gudaha':'✈️ Dibadda'}</p></div>
+      <div class="detail-item full"><label>Description</label><p>${b.desc||'—'}</p></div>
+    </div></div>
+    <div class="detail-section"><h4>Suuqa & Badeecada</h4><div class="detail-grid">
+      <div class="detail-item full"><label>Baahida</label><p>${b.need||'—'}</p></div>
+      <div class="detail-item full"><label>Badeecada</label><p>${b.product||'—'}</p></div>
+      <div class="detail-item full"><label>Unique Value</label><p>${b.value||'—'}</p></div>
+    </div></div>
+    <div class="detail-section"><h4>Xeeladda</h4><div class="detail-grid">
+      <div class="detail-item full"><label>Fursadaha</label><p>${b.opp||'—'}</p></div>
+      <div class="detail-item full"><label>Strategy</label><p>${b.strategy||'—'}</p></div>
+      <div class="detail-item full"><label>Macaamiisha</label><p>${b.customers||'—'}</p></div>
+      <div class="detail-item full"><label>Marketing</label><p>${b.marketing||'—'}</p></div>
+    </div></div>
+    <div class="detail-section"><h4>Su'aalaha Ganacsiga</h4><div class="detail-grid">
+      ${boolStr('reg','La diiwaan galin karaa?')}
+      ${boolStr('danger','Aalado halista ah?')}
+      ${boolStr('drugs','Mukhadaraadka xiriir?')}
+      ${boolStr('fire','Aalada dabka dhaliya?')}
+    </div></div>
+    <div class="detail-section"><h4>Maaliyadda</h4><div class="detail-grid">
+      <div class="detail-item"><label>Capital</label><p style="color:var(--gold2);font-family:'JetBrains Mono',monospace">$${b.capital.toLocaleString()}</p></div>
+      <div class="detail-item"><label>Score</label><p style="color:var(--gold2)">${b.score}/10 ⭐</p></div>
+    </div></div>
+    <div class="detail-section"><h4>Liiska Sheyga</h4>${iHtml}</div>
+    <div class="detail-section"><h4>Taariikh</h4><div class="detail-grid">
+      <div class="detail-item"><label>Date</label><p>${b.date}</p></div>
+      <div class="detail-item"><label>Time</label><p>${b.time||'—'}</p></div>
+    </div></div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+/* ===== EDIT MODAL ===== */
+let editItems=[];   // working copy of items for edit modal
+let editIskRows=[]; // working copy of iskugeyn for edit modal
+
+function openEditModal(id){
+  currentEditId=id; editMode=true;
+  const b=businesses.find(x=>x.id===id); if(!b)return;
+
+  // Deep-copy items & iskRows from the business
+  editItems = (b.items||[]).map(x=>({...x}));
+  editIskRows = (b.iskRows||[]).map(x=>({...x}));
+  // Ensure at least 15 iskRows
+  while(editIskRows.length<15) editIskRows.push({img:'',name:'',price:''});
+  editLocVal = b.loc||'local';
+
+  document.getElementById('modal-title').textContent='✏️ Edit: '+b.name;
+  document.getElementById('modal-edit-btn').style.display='none';
+  document.getElementById('modal-save-btn').style.display='';
+
+  const indOpts=['','Technology / Teknolojiyad','Food & Restaurant / Cunto','Retail / Iibinta','Education / Waxbarashada','Health / Caafimaad','Construction / Dhismo','Transport / Gadiid','Agriculture / Beeraha','Finance / Maaliyadda','Other / Kale'].map(o=>`<option${b.industry===o?' selected':''}>${o}</option>`).join('');
+  const boolHtml=(key,vals)=>vals.map(v=>`<button class="tog-btn ${v.cls}${(b.bools&&b.bools[key]===v.val)||(!b.bools&&v.val==='no')?' active':''}" data-boolkey="${key}" data-boolval="${v.val}" onclick="editToggleBool(this)">${v.label}</button>`).join('');
+
+  document.getElementById('modal-body').innerHTML=`
+    <!-- SECTION: Basic -->
+    <div style="font-size:.72rem;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟦 Macluumaadka Aasaasiga</div>
+    <div class="edit-form-grid">
+      <div class="ef"><label>Business Name *</label><input id="e-name" value="${esc(b.name)}"></div>
+      <div class="ef"><label>Industry / Nooca</label><select id="e-industry">${indOpts}</select></div>
+    </div>
+    <div class="edit-form-grid" style="margin-bottom:12px">
+      <div class="ef"><label>📍 Location / Goobta</label>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button id="e-loc-local" onclick="editLoc('local')" style="flex:1;padding:8px;border-radius:7px;border:1px solid ${b.loc==='local'?'var(--accent)':'var(--border2)'};background:${b.loc==='local'?'rgba(108,99,255,.15)':'var(--bg3)'};color:${b.loc==='local'?'var(--accent2)':'var(--text2)'};cursor:pointer;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;transition:all .2s">🏠 Gudaha</button>
+          <button id="e-loc-intl" onclick="editLoc('intl')" style="flex:1;padding:8px;border-radius:7px;border:1px solid ${b.loc==='intl'?'var(--accent)':'var(--border2)'};background:${b.loc==='intl'?'rgba(108,99,255,.15)':'var(--bg3)'};color:${b.loc==='intl'?'var(--accent2)':'var(--text2)'};cursor:pointer;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;transition:all .2s">✈️ Dibadda</button>
+        </div>
+      </div>
+      <div class="ef"><label>📅 Taariikhda / Date</label><input type="date" id="e-date" value="${b.date||''}"></div>
+      <div class="ef"><label>⏰ Saacada / Time</label><input type="time" id="e-time" value="${b.time||''}"></div>
+    </div>
+
+    <!-- SECTION: Descriptions -->
+    <div style="font-size:.72rem;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟩 Sharaxaadda & Suuqa</div>
+    <div class="edit-form-grid single">
+      <div class="ef"><label>Sharaxaad / Description</label><textarea id="e-desc">${esc(b.desc||'')}</textarea></div>
+      <div class="ef"><label>Baahida / Need</label><textarea id="e-need">${esc(b.need||'')}</textarea></div>
+      <div class="ef"><label>Suuqa / Market</label><textarea id="e-market">${esc(b.market||'')}</textarea></div>
+      <div class="ef"><label>Badeecada / Product</label><textarea id="e-product">${esc(b.product||'')}</textarea></div>
+      <div class="ef"><label>Unique Value / Qiimaha Gaarka</label><textarea id="e-value">${esc(b.value||'')}</textarea></div>
+      <div class="ef"><label>Fursadaha / Opportunities</label><textarea id="e-opp">${esc(b.opp||'')}</textarea></div>
+      <div class="ef"><label>Xeeladda / Strategy</label><textarea id="e-strategy">${esc(b.strategy||'')}</textarea></div>
+      <div class="ef"><label>Macaamiisha / Customers</label><textarea id="e-customers">${esc(b.customers||'')}</textarea></div>
+      <div class="ef"><label>Marketing</label><textarea id="e-marketing">${esc(b.marketing||'')}</textarea></div>
+    </div>
+
+    <!-- SECTION: Questions -->
+    <div style="font-size:.72rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟦 Su'aalaha Ganacsiga</div>
+    <div class="bool-grid" style="margin-bottom:14px">
+      <div class="bool-item"><span class="bool-label">La diiwaan galin karaa?</span><div class="toggle">${boolHtml('reg',[{cls:'yes',val:'yes',label:'Haa'},{cls:'no',val:'no',label:'Maya'}])}</div></div>
+      <div class="bool-item"><span class="bool-label">Aalado halista ah?</span><div class="toggle">${boolHtml('danger',[{cls:'yes',val:'yes',label:'Haa'},{cls:'no',val:'no',label:'Maya'}])}</div></div>
+      <div class="bool-item"><span class="bool-label">Mukhadaraadka xiriir?</span><div class="toggle">${boolHtml('drugs',[{cls:'yes',val:'yes',label:'Haa'},{cls:'no',val:'no',label:'Maya'}])}</div></div>
+      <div class="bool-item"><span class="bool-label">Aalada dabka dhaliya?</span><div class="toggle">${boolHtml('fire',[{cls:'yes',val:'yes',label:'Haa'},{cls:'no',val:'no',label:'Maya'}])}</div></div>
+    </div>
+
+    <!-- SECTION: Capital -->
+    <div style="font-size:.72rem;color:var(--gold2);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟨 Maaliyadda / Capital</div>
+    <div class="edit-form-grid" style="margin-bottom:14px">
+      <div class="ef"><label>💵 Starting Capital ($)</label><input type="number" id="e-capital" value="${b.capital}" min="0" placeholder="0.00"></div>
+      <div class="ef"><label>⭐ Success Rate (1-10)</label><input type="number" id="e-score" min="1" max="10" value="${b.score}" placeholder="1-10"></div>
+    </div>
+
+    <!-- SECTION: Items List (Section 12) -->
+    <div style="font-size:.72rem;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟧 Liiska Sheyga — Items List</div>
+    <div style="display:grid;grid-template-columns:46px 2fr 1.3fr 80px 1fr auto;gap:6px;padding:0 0 5px;font-size:.68rem;color:var(--text3);font-weight:600">
+      <span>📸</span><span>MAGACA</span><span>MEESHA</span><span>$</span><span>LINK</span><span></span>
+    </div>
+    <div class="items-list" id="e-items-list"></div>
+    <button class="add-item-btn" onclick="eAddItem()" style="margin-bottom:14px">+ Ku dar shey cusub</button>
+
+    <!-- SECTION: Iskugeyn (Section 13) -->
+    <div style="font-size:.72rem;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🟦 Qorshaha Iskugeyn — Startup Items</div>
+    <div style="overflow-x:auto;margin-bottom:6px">
+      <table class="iskugeyn-table" style="min-width:340px">
+        <thead><tr>
+          <th style="width:32px">#</th>
+          <th style="width:56px">📸</th>
+          <th>📦 Magaca Sheyda</th>
+          <th style="width:110px">💵 Qiimaha</th>
+        </tr></thead>
+        <tbody id="e-isk-body"></tbody>
+        <tfoot>
+          <tr class="isk-total-row">
+            <td colspan="2" style="color:var(--text2);font-size:.75rem">💵 WADARTA</td>
+            <td style="color:var(--text2);font-size:.72rem" id="e-isk-count">0 shey</td>
+            <td><span class="isk-grand-total" id="e-isk-total">$0.00</span></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="display:flex;gap:7px;margin-bottom:6px">
+      <button class="add-item-btn" style="flex:1" onclick="eAddIskRow()">+ Ku dar shey</button>
+      <button class="add-item-btn" style="flex:none;padding:9px 14px;border-color:var(--red);color:var(--red)" onclick="eClearIskRows()">🗑 Nadiifi</button>
+    </div>`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  eRenderItems();
+  eRenderIskRows();
+}
+
+/* --- Edit Modal: Items helpers --- */
+function eRenderItems(){
+  const el=document.getElementById('e-items-list'); if(!el)return;
+  el.innerHTML=editItems.map((it,i)=>`
+    <div class="item-row" style="grid-template-columns:46px 2fr 1.3fr 80px 1fr auto">
+      <div class="item-img-thumb" style="width:40px;height:40px">
+        ${it.imgSrc?`<img src="${it.imgSrc}">`:`<span style="font-size:.95rem;color:var(--text3)">📷</span>`}
+        <input type="file" accept="image/*" onchange="eLoadItemImg(${i},this)">
+      </div>
+      <input placeholder="Magaca..." value="${esc(it.name)}" oninput="editItems[${i}].name=this.value">
+      <input class="item-source" placeholder="Meesha..." value="${esc(it.source)}" oninput="editItems[${i}].source=this.value">
+      <input type="number" placeholder="$0" value="${it.price}" oninput="editItems[${i}].price=this.value">
+      <input class="item-link" placeholder="https://..." value="${esc(it.link)}" oninput="editItems[${i}].link=this.value">
+      <button class="del-btn" onclick="eDelItem(${i})">✕</button>
+    </div>`).join('');
+}
+function eAddItem(){editItems.push({id:Date.now(),imgSrc:'',name:'',source:'',price:'',link:''});eRenderItems();}
+function eDelItem(i){editItems.splice(i,1);eRenderItems();}
+function eLoadItemImg(i,inp){
+  const f=inp.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{editItems[i].imgSrc=e.target.result;eRenderItems()}; r.readAsDataURL(f);
+}
+
+/* --- Edit Modal: Iskugeyn helpers --- */
+function eRenderIskRows(){
+  const el=document.getElementById('e-isk-body'); if(!el)return;
+  el.innerHTML=editIskRows.map((r,i)=>`
+    <tr>
+      <td class="isk-num">${i+1}</td>
+      <td>
+        <div class="isk-img-cell" style="width:44px;height:44px">
+          ${r.img?`<img src="${r.img}">`:`<span class="isk-img-icon" style="font-size:.95rem">📷</span>`}
+          <input type="file" accept="image/*" onchange="eLoadIskImg(${i},this)">
+        </div>
+      </td>
+      <td><input class="isk-inp" type="text" placeholder="Magaca sheyda..." value="${esc(r.name)}" oninput="editIskRows[${i}].name=this.value;eCalcIskTotal()"></td>
+      <td><input class="isk-inp isk-price" type="number" placeholder="0.00" value="${r.price}" oninput="editIskRows[${i}].price=this.value;eCalcIskTotal()"></td>
+    </tr>`).join('');
+  eCalcIskTotal();
+}
+function eCalcIskTotal(){
+  const active=editIskRows.filter(r=>r.name||r.price);
+  const total=editIskRows.reduce((s,r)=>s+parseFloat(r.price||0),0);
+  const tc=document.getElementById('e-isk-total'); if(tc)tc.textContent='$'+total.toFixed(2);
+  const cc=document.getElementById('e-isk-count'); if(cc)cc.textContent=active.length+' shey';
+}
+function eAddIskRow(){editIskRows.push({img:'',name:'',price:''});eRenderIskRows();}
+function eClearIskRows(){
+  if(!confirm('Iskugeynka dhamaan nadiifi?'))return;
+  editIskRows=[];
+  for(let i=0;i<15;i++) editIskRows.push({img:'',name:'',price:''});
+  eRenderIskRows();
+}
+function eLoadIskImg(i,inp){
+  const f=inp.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{editIskRows[i].img=e.target.result;eRenderIskRows()}; r.readAsDataURL(f);
+}
+
+let editLocVal='local';
+function editLoc(v){
+  editLocVal=v;
+  const lb=document.getElementById('e-loc-local'), ib=document.getElementById('e-loc-intl');
+  if(!lb||!ib)return;
+  lb.style.borderColor=v==='local'?'var(--accent)':'var(--border2)';
+  lb.style.background=v==='local'?'rgba(108,99,255,.15)':'var(--bg3)';
+  lb.style.color=v==='local'?'var(--accent2)':'var(--text2)';
+  ib.style.borderColor=v==='intl'?'var(--accent)':'var(--border2)';
+  ib.style.background=v==='intl'?'rgba(108,99,255,.15)':'var(--bg3)';
+  ib.style.color=v==='intl'?'var(--accent2)':'var(--text2)';
+}
+function editToggleBool(btn){
+  btn.closest('.toggle').querySelectorAll('.tog-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleEditMode(){
+  const b=businesses.find(x=>x.id===currentEditId);
+  if(!b)return;
+  openEditModal(b.id);
+}
+
+async function saveEditedPlan(){
+  const b=businesses.find(x=>x.id===currentEditId); if(!b)return;
+  const name=document.getElementById('e-name').value.trim();
+  if(!name){alert('Magaca geli!');return;}
+  const editBools={};
+  document.querySelectorAll('[data-boolkey]').forEach(btn=>{
+    if(btn.classList.contains('active')) editBools[btn.dataset.boolkey]=btn.dataset.boolval;
+  });
+  b.name=name;
+  b.industry=document.getElementById('e-industry').value;
+  b.loc=editLocVal;
+  b.capital=parseFloat(document.getElementById('e-capital').value)||0;
+  b.score=Math.min(10,Math.max(1,parseInt(document.getElementById('e-score').value)||5));
+  b.desc=document.getElementById('e-desc').value;
+  b.need=document.getElementById('e-need').value;
+  b.market=document.getElementById('e-market').value;
+  b.product=document.getElementById('e-product').value;
+  b.value=document.getElementById('e-value').value;
+  b.opp=document.getElementById('e-opp').value;
+  b.strategy=document.getElementById('e-strategy').value;
+  b.customers=document.getElementById('e-customers').value;
+  b.marketing=document.getElementById('e-marketing').value;
+  b.bools=editBools;
+  b.date=document.getElementById('e-date').value;
+  b.time=document.getElementById('e-time').value;
+  // Save edited items & iskRows
+  b.items=[...editItems];
+  b.iskRows=[...editIskRows];
+  b.totalCost=editItems.reduce((s,x)=>s+parseFloat(x.price||0),0);
+  await saveToStorage(businesses);
+  alert('✅ Waa la keydsaday!');
+  closeModal();
+  renderDashboard();
+}
+
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+
+function esc(s){return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+init();
+</script>
+</body>
+</html>

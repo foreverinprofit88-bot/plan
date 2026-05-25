@@ -445,9 +445,9 @@ const FB_BASE = 'https://bizplan-pro-9b646-default-rtdb.firebaseio.com';
 async function loadFromStorage() {
   try {
     updateStorageBadge('loading', 0);
-    const res = await fetch(FB_BASE + '/bizplans.json', { method: 'GET' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const res = await fetch(FB_BASE + '/bizplans.json');
     const data = await res.json();
+    // Firebase returns null when empty — this is normal
     const arr = Array.isArray(data) ? data.filter(Boolean) : [];
     updateStorageBadge('ok', arr.length);
     return arr;
